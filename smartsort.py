@@ -150,17 +150,27 @@ def smartMergeSortAll(A):
 #       {4T(n/4) + Theta(n), otherwise
 #By the master theorem, this gives a runtime of Theta(nlgn).
 #However, we may instead call isWithinRun and insertSort(). 
-#insertSort() has Theta(nlgn) unchanged adding isWithinRun()'s.
+#insertSort() has Theta(nlgn), unchanged adding isWithinRun()'s.
 #One of these cases is done, and the function will be Theta(nlgn) regardless.
 #smartMergeSortAll's other operations are 'small change' with smartMergeSort.
 #Therefor, in the worst case, smartMergeSortAll has a Theta(nlgn) runtime.
 
 # 2. Runtime analysis for nearly-sorted inputs.
-#
-#
-#
-#
-# (continue as necessary)
+#Worst case: there is one 'bad' unsorted element.
+#isWithinRun will be Theta(n) in the worst case.
+#Most of the runtime is in smartMergeSort. Ignore insertSort() for now.
+#3 subcalls without 'bad' element will be sorted and return in Theta(n).
+#Calculation of p,q, and r is constant.
+#Combined with isWithinRun and 3 'merge's, will be Theta(n) overall.
+#T(n) = {Theta(1), n-m <= threshold        (again, ignoring insertSort)
+#       {T(n/4) + Theta(n), otherwise
+#By master theorem, this gives Theta(n)
+#insertSort is Theta(n) for conditions. i.e. moving 'bad' end-to-end.
+#This case's runtime is unchanged adding isWithinRun().
+#One of these cases is done, and the function will be Theta(n) regardless.
+#smartMergeSortAll's other operations are O(n) and thus irrelevant.
+#-> with nearly-sorted list and worst-case, we have Theta(n) runtime.
+
 
 
 # Functions added for automarking purposes - please don't touch these!
