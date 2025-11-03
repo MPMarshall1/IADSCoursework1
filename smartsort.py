@@ -140,11 +140,20 @@ def smartMergeSortAll(A):
 # TODO: Task 3. Asymptotic analysis of smartMergeSortAll
 
 # 1. Justification of O(n lg n) bound.
-#
-#
-#
-#
-# (continue as necessary)
+#Most of the runtime is in smartMergeSort. Ignore insertSort() for now.
+#isWithinRun() will run through a queue preportional to n and so is Theta(n).
+#The calculations of q,p, and r are constant; Theta(1).
+#Merge is linear. All three 'merge()'s are therefor Theta(n).
+#These 'divide and combine' operations are Theta(n + n + 1) = Theta(n).
+#Four recursive calls are made with n/4 sized parameters.
+#T(n) = {Theta(1), n-m <= threshold        (again, ignoring insertSort)
+#       {4T(n/4) + Theta(n), otherwise
+#By the master theorem, this gives a runtime of Theta(nlgn).
+#However, we may instead call isWithinRun and insertSort(). 
+#insertSort() has Theta(nlgn) unchanged adding isWithinRun()'s.
+#One of these cases is done, and the function will be Theta(nlgn) regardless.
+#smartMergeSortAll's other operations are 'small change' with smartMergeSort.
+#Therefor, in the worst case, smartMergeSortAll has a Theta(nlgn) runtime.
 
 # 2. Runtime analysis for nearly-sorted inputs.
 #
