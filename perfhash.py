@@ -14,7 +14,7 @@ def toInt(w):
     """Encodes a lowercase English word as an integer"""
     b = w.encode()
     t = 0
-    for i in b:
+    for i in range(len(b)):
         t = t*27 + b[i] - 96
     return t
 
@@ -37,10 +37,19 @@ def miniHash(m,j):
 def buildHashTable(L,r,h):
     """Arrange items of L into r buckets using hash fun h with range 0,..,r-1.
     Returns the list of buckets."""
+    table = []
+    for i in range(r):
+        table.append([])
+    for x in L:
+        table[h(x)].append(x)
+    return table
+        
 
 
 def buildModHashTable(L,p):
     """Apply buildHashTable to the modHash function for p."""
+    h = lambda s: modHash(s, p)
+    return buildHashTable(L, p, h)
 
 
 # TODO: Task 2. Computing mini-hash indices for a given list L of buckets,
@@ -49,6 +58,31 @@ def buildModHashTable(L,p):
 def computeMiniHashIndices(L,m):
     """Compute suitable mini-hash indices for a given list L of buckets,
     where mini-hash funs have range 0,..,m-1"""
+    sortingCriteria = lambda indexAndBucket: len(indexAndBucket[1])
+    sortedL = [(i, L[i]) for i in range(len(L))]
+    sortedL.sort(reverse=True, key=sortingCriteria)
+    T = [False]*m  
+    R = [0]*len(sortedL)
+    for (originalIndex, B) in sortedL:
+        j = -1
+        suitable = False
+        indicesOfTtoChange = []
+        while (suitable == False): 
+            suitable = True
+            indicesOfTtoChange = []
+            j = j + 1
+            for element in B:
+                destination = miniHash(m,j)(element)
+                if (T[destination]):
+                    suitable = False
+                indicesOfTtoChange.append(destination)
+            areDuplicates = indicesOfTtoChange.sort() == list(set(indicesOfTtoChange))
+            if (areDuplicates):
+                suitable = False
+        for i in indicesOfTtoChange:
+            T[i] = True
+        R[originalIndex] = j
+    return R
 
 
 # Provided code for putting all this together.
@@ -95,7 +129,7 @@ class Hasher:
         i = modHash(key,self.r)
         h = miniHash(self.m,self.hashChoices[i])
         return h(key)
-
+    
 
 class HashDict:
     """Implementation of dictionaries via perfect hashing"""
@@ -119,15 +153,38 @@ class HashDict:
         self.H = Hasher(keys,oload,load)
         self.T = HashDict.buildFlatTable(keyvals,self.H)
 
-
+        
 # TODO: Task 3: lookup and setValue methods.
-
+    
     def lookup(self,k):
         """Return value associated with k, or None if k not present"""
+        hashCode = self.H.hash(k)
+        keyvalue = self.T[hashCode]
+        if (keyvalue[0] == k):
+            return keyvalue[1]
+        return None
+        
 
     def setValue(self,k,v):
         """If k is present, update its value to v. Return whether k present."""
-
+        hashCode = self.H.hash(k)
+        keyvalue = self.T[hashCode]
+        if (keyvalue[0] == k):
+            self.T[hashCode][1] = v
+            return True
+        return False
+        
+def main():
+    dict = HashDict([['a',1], ['b',2], ['c',3]], 1.0, 1.0)
+    print(dict.lookup('a'))
+    print(dict.lookup('b'))
+    print(dict.lookup('c'))
+    print(dict.setValue('z', 1))
+    print(dict.setValue('z', 4))
+    print(dict.setValue('z', 9))
+    print(dict.lookup('a'))
+    print(dict.lookup('b'))
+    print(dict.lookup('c'))
 
 # TODO: Task 4: Towards an insert method
 
