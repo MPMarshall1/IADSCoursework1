@@ -191,9 +191,36 @@ def main():
 # Please add some discussion (as comments), and/or working code for insert.
 # Do not exceed 30 lines (max 79 chars each) in total, excluding blank lines.
 
+#New keyvalue will be sent to existing (perhaps empty) bucket.
+#
+
     def insert(self,k,v):
         """ Insert pair k,v into dictionary, where k is new."""
         ### Implementation optional
+        self.T.append()
+        keyValue = [k,v]
+        bucket = modHash(keyValue[0], self.r)
+        self.H.hashChoices[bucket] = -1
+        #find new
+        j = -1
+        suitable = False
+        indicesOfTtoChange = []
+        while (suitable == False): 
+            suitable = True
+            indicesOfTtoChange = []
+            j = j + 1
+            for element in B:
+                destination = miniHash(m,j)(element)
+                if (T[destination]):
+                    suitable = False
+                indicesOfTtoChange.append(destination)
+            areDuplicates = indicesOfTtoChange.sort() == list(set(indicesOfTtoChange))
+            if (areDuplicates):
+                suitable = False
+        for i in indicesOfTtoChange:
+            T[i] = True
+        R[originalIndex] = j
+
 
     
 # For testing: Loading in a word list
