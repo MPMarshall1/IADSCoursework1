@@ -66,7 +66,7 @@ def computeMiniHashIndices(L,m):
     for (originalIndex, B) in sortedL:
         j = -1
         suitable = False
-        indicesOfTtoChange = []
+        toChange = []
         while (suitable == False): 
             suitable = True
             indicesOfTtoChange = []
@@ -76,7 +76,7 @@ def computeMiniHashIndices(L,m):
                 if (T[destination]):
                     suitable = False
                 indicesOfTtoChange.append(destination)
-            areDuplicates = indicesOfTtoChange.sort() == list(set(indicesOfTtoChange))
+            areDuplicates = toChange.sort() == list(set(toChange))
             if (areDuplicates):
                 suitable = False
         for i in indicesOfTtoChange:
@@ -174,52 +174,40 @@ class HashDict:
             return True
         return False
         
-def main():
-    dict = HashDict([['a',1], ['b',2], ['c',3]], 1.0, 1.0)
-    print(dict.lookup('a'))
-    print(dict.lookup('b'))
-    print(dict.lookup('c'))
-    print(dict.setValue('z', 1))
-    print(dict.setValue('z', 4))
-    print(dict.setValue('z', 9))
-    print(dict.lookup('a'))
-    print(dict.lookup('b'))
-    print(dict.lookup('c'))
+
 
 # TODO: Task 4: Towards an insert method
 
 # Please add some discussion (as comments), and/or working code for insert.
 # Do not exceed 30 lines (max 79 chars each) in total, excluding blank lines.
 
-#New keyvalue will be sent to existing (perhaps empty) bucket.
-#
-
     def insert(self,k,v):
         """ Insert pair k,v into dictionary, where k is new."""
         ### Implementation optional
-        self.T.append()
+        #A new space must be appended to the final hash table to accomodate.
+        self.T.append([])
         keyValue = [k,v]
-        bucket = modHash(keyValue[0], self.r)
-        self.H.hashChoices[bucket] = -1
-        #find new
+        #New keyvalue will be sent to existing (perhaps empty) bucket.
+        bucketLocation = modHash(keyValue[0], self.H.r)
+        #If the intermediate hash table was stored, yielding, for example
+        bucket = ['a', 'b', 'y', 'f']
+        #we would be able to quickly update the hashChoice for that bucket 
+        #in a similar way to finding it initially.
         j = -1
         suitable = False
-        indicesOfTtoChange = []
         while (suitable == False): 
             suitable = True
-            indicesOfTtoChange = []
+            destinations = []
             j = j + 1
-            for element in B:
-                destination = miniHash(m,j)(element)
-                if (T[destination]):
+            for element in bucket:
+                destination = miniHash(self.H.m,j)(element)
+                if (self.H.hash(element) != None):
                     suitable = False
-                indicesOfTtoChange.append(destination)
-            areDuplicates = indicesOfTtoChange.sort() == list(set(indicesOfTtoChange))
+                destinations.append(destination)
+            areDuplicates = destinations.sort() == list(set(destinations))
             if (areDuplicates):
                 suitable = False
-        for i in indicesOfTtoChange:
-            T[i] = True
-        R[originalIndex] = j
+        self.H.hashChoices[bucketLocation] = j
 
 
     
