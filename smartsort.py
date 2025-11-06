@@ -52,7 +52,6 @@ def merge(C,D,m,p,n):
         else:
             D[i] = C[a]
             a = a + 1
-    
 
 
 def greenMergeSort(A,B,m,n):
@@ -150,8 +149,8 @@ def smartMergeSortAll(A):
 #       {4T(n/4) + Theta(n), otherwise
 #By the master theorem, this gives a runtime of Theta(nlgn).
 #However, we may instead call isWithinRun and insertSort(). 
-#insertSort() has Theta(nlgn), unchanged adding isWithinRun()'s.
-#One of these cases is done, and the function will be Theta(nlgn) regardless.
+#insertSort is Theta(n^2), unchanged adding isWithinRun()'s but is used once.
+#Overall the function will be Theta(nlgn) since insert is done on small sets.
 #smartMergeSortAll's other operations are 'small change' with smartMergeSort.
 #Therefor, in the worst case, smartMergeSortAll has a Theta(nlgn) runtime.
 
