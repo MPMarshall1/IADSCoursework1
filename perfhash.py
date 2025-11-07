@@ -37,19 +37,17 @@ def miniHash(m,j):
 def buildHashTable(L,r,h):
     """Arrange items of L into r buckets using hash fun h with range 0,..,r-1.
     Returns the list of buckets."""
-    table = []
-    for i in range(r):
-        table.append([])
-    for x in L:
-        table[h(x)].append(x)
+    table = [[]]*r #makes table of correct size
+    for element in L:
+        table[h(element)].append(element)
     return table
         
 
 
 def buildModHashTable(L,p):
     """Apply buildHashTable to the modHash function for p."""
-    h = lambda s: modHash(s, p)
-    return buildHashTable(L, p, h)
+    modHashFunction = lambda s: modHash(s, p)
+    return buildHashTable(L, p, modHashFunction)
 
 
 # TODO: Task 2. Computing mini-hash indices for a given list L of buckets,
@@ -58,29 +56,38 @@ def buildModHashTable(L,p):
 def computeMiniHashIndices(L,m):
     """Compute suitable mini-hash indices for a given list L of buckets,
     where mini-hash funs have range 0,..,m-1"""
+    
+    #sort buckets in decreasing order of size.
     sortingCriteria = lambda indexAndBucket: len(indexAndBucket[1])
     sortedL = [(i, L[i]) for i in range(len(L))]
     sortedL.sort(reverse=True, key=sortingCriteria)
-    T = [False]*m  
-    R = [0]*len(sortedL)
-    for (originalIndex, B) in sortedL:
+    
+    T = [False]*m #'taken' slots in main table.
+    R = [0]*len(sortedL) #mutually suitable miniHash j's for buckets.
+    
+    for (originalIndex, bucket) in sortedL:
         j = -1
         suitable = False
         toChange = []
-        while (suitable == False): 
+        
+        while (suitable == False): #while chosen j-value is not suitable.
             suitable = True
-            indicesOfTtoChange = []
+            toChange = []
             j = j + 1
-            for element in B:
+            
+            for element in bucket:
                 destination = miniHash(m,j)(element)
-                if (T[destination]):
+                if (T[destination]): #if destination is taken
                     suitable = False
-                indicesOfTtoChange.append(destination)
+                toChange.append(destination)
+            
             areDuplicates = toChange.sort() == list(set(toChange))
-            if (areDuplicates):
+            if (areDuplicates): #if multiple elements of bucket converge.
                 suitable = False
-        for i in indicesOfTtoChange:
-            T[i] = True
+                
+        for i in toChange:
+            T[i] = True #update 'taken' values
+            
         R[originalIndex] = j
     return R
 
@@ -158,19 +165,19 @@ class HashDict:
     
     def lookup(self,k):
         """Return value associated with k, or None if k not present"""
-        hashCode = self.H.hash(k)
-        keyvalue = self.T[hashCode]
-        if (keyvalue[0] == k):
-            return keyvalue[1]
-        return None
+        destination = self.H.hash(k)
+        keyvalueAtDestination = self.T[destination]
+        if (keyvalueAtDestination[0] == k): #ensure that key is correct
+            return keyvalueAtDestination[1]
+        return None #return None if key is incorrect
         
 
     def setValue(self,k,v):
         """If k is present, update its value to v. Return whether k present."""
-        hashCode = self.H.hash(k)
-        keyvalue = self.T[hashCode]
-        if (keyvalue[0] == k):
-            self.T[hashCode][1] = v
+        destination = self.H.hash(k)
+        keyvalueAtDestination = self.T[destination]
+        if (keyvalueAtDestination[0] == k): #ensure key is correct
+            self.T[destination][1] = v #update
             return True
         return False
         
