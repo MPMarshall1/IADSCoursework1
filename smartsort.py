@@ -163,8 +163,9 @@ def smartMergeSortAll(A):
 #       {4T(n/4) + Theta(n), otherwise
 #By the master theorem, this gives a runtime of Theta(nlgn).
 #However, we may instead call isWithinRun and insertSort(). 
-#insertSort is Theta(n^2), unchanged adding isWithinRun()'s but is used once.
-#Overall the function will be Theta(nlgn) since insert is done on small sets.
+#insertSort is Theta(n^2), unchanged adding isWithinRun()'s but is used only
+#at the bottom level of recursion, so does not affect overall runtime.
+#Overall the function will be Theta(nlgn) because of this.
 #smartMergeSortAll's other operations are 'small change' with smartMergeSort.
 #Therefor, in the worst case, smartMergeSortAll has a Theta(nlgn) runtime.
 
