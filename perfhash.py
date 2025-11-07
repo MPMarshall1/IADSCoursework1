@@ -37,7 +37,9 @@ def miniHash(m,j):
 def buildHashTable(L,r,h):
     """Arrange items of L into r buckets using hash fun h with range 0,..,r-1.
     Returns the list of buckets."""
-    table = [[]]*r #makes table of correct size
+    table = []
+    for i in range(r): #makes table of correct size
+        table.append([])
     for element in L:
         table[h(element)].append(element)
     return table
@@ -81,7 +83,7 @@ def computeMiniHashIndices(L,m):
                     suitable = False
                 toChange.append(destination)
             
-            areDuplicates = toChange.sort() == list(set(toChange))
+            areDuplicates = len(toChange) != len(set(toChange))
             if (areDuplicates): #if multiple elements of bucket converge.
                 suitable = False
                 
@@ -146,6 +148,7 @@ class HashDict:
         Assuming H is perfect for the keys appearing in keyvals,
         builds table of in-place key-value pairs (no buckets)."""
         HT = buildHashTable(keyvals, H.m, lambda kv: H.hash(kv[0]))
+        
         # HT will have <= 1 item per bucket, so can flatten the list:
         return [None if b==[] else b[0] for b in HT]
 
@@ -167,6 +170,7 @@ class HashDict:
         """Return value associated with k, or None if k not present"""
         destination = self.H.hash(k)
         keyvalueAtDestination = self.T[destination]
+        
         if (keyvalueAtDestination[0] == k): #ensure that key is correct
             return keyvalueAtDestination[1]
         return None #return None if key is incorrect
@@ -176,6 +180,7 @@ class HashDict:
         """If k is present, update its value to v. Return whether k present."""
         destination = self.H.hash(k)
         keyvalueAtDestination = self.T[destination]
+        
         if (keyvalueAtDestination[0] == k): #ensure key is correct
             self.T[destination][1] = v #update
             return True
@@ -190,30 +195,36 @@ class HashDict:
 
     def insert(self,k,v):
         """ Insert pair k,v into dictionary, where k is new."""
-        ### Implementation optional
         #A new space must be appended to the final hash table to accomodate.
         self.T.append([])
         keyValue = [k,v]
+        
         #New keyvalue will be sent to existing (perhaps empty) bucket.
         bucketLocation = modHash(keyValue[0], self.H.r)
+        
         #If the intermediate hash table was stored, yielding, for example
         bucket = ['a', 'b', 'y', 'f']
         #we would be able to quickly update the hashChoice for that bucket 
         #in a similar way to finding it initially.
+        
         j = -1
         suitable = False
+        
         while (suitable == False): 
             suitable = True
             destinations = []
             j = j + 1
+            
             for element in bucket:
                 destination = miniHash(self.H.m,j)(element)
                 if (self.H.hash(element) != None):
                     suitable = False
                 destinations.append(destination)
+                
             areDuplicates = destinations.sort() == list(set(destinations))
             if (areDuplicates):
                 suitable = False
+                
         self.H.hashChoices[bucketLocation] = j
 
 
